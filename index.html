@@ -144,6 +144,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/15/argocd-terminal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Elapsed">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/15/argocd-terminal/" class="post-title-link" itemprop="url">argocd 进到pod内部的terminal</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-15 21:19:53 / Modified: 21:40:59" itemprop="dateCreated datePublished" datetime="2025-03-15T21:19:53+08:00">2025-03-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>argocd：管理和自动化 k8s 上的应用程序部署</p>
+<p>如何通过argocd，进到pod内部的terminal，执行命令呢？</p>
+<ol>
+<li>进到某个application里面</li>
+<li>假如点了左上角 Group Nodes，要取消掉（否则第3步会筛选不出pod）</li>
+<li>左边栏 KINDS 筛选 pod</li>
+<li>点开目标的pod，就能进到terminal</li>
+</ol>
+<p>之后以排查堆内oom为例：</p>
+<ol>
+<li>查找 Java 进程的 PID</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep java</span><br><span class="line">// 假设返回1</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>运行 jmap 命令</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -histo:live 1</span><br></pre></td></tr></table></figure>
+
+<p>假设报错，参考这篇文章 <a target="_blank" rel="noopener" href="https://robberphex.com/attach-jvm-in-container-at-arthas/">https://robberphex.com/attach-jvm-in-container-at-arthas/</a></p>
+<p>简单来说，执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pid=1 ;\</span><br><span class="line">touch /proc/$&#123;pid&#125;/cwd/.attach_pid$&#123;pid&#125; &amp;&amp; \</span><br><span class="line">  kill -SIGQUIT $&#123;pid&#125; &amp;&amp; \</span><br><span class="line">  sleep 2 &amp;&amp;</span><br><span class="line">  ls /proc/$&#123;pid&#125;/root/tmp/.java_pid$&#123;pid&#125;</span><br></pre></td></tr></table></figure>
+<p>之后再jmap，就ok了</p>
+<p>另外需要注意的是，argocd terminal有行数限制<br>进一步限制行数（20行），排查前几的大对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -histo:live 1 | head -n 20</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/14/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -276,7 +358,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
