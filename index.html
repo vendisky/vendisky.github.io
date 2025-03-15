@@ -169,7 +169,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-03-15 21:19:53 / Modified: 21:40:59" itemprop="dateCreated datePublished" datetime="2025-03-15T21:19:53+08:00">2025-03-15</time>
+              <time title="Created: 2025-03-15 21:19:53 / Modified: 21:42:38" itemprop="dateCreated datePublished" datetime="2025-03-15T21:19:53+08:00">2025-03-15</time>
             </span>
 
           
@@ -206,7 +206,7 @@
 <p>简单来说，执行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pid=1 ;\</span><br><span class="line">touch /proc/$&#123;pid&#125;/cwd/.attach_pid$&#123;pid&#125; &amp;&amp; \</span><br><span class="line">  kill -SIGQUIT $&#123;pid&#125; &amp;&amp; \</span><br><span class="line">  sleep 2 &amp;&amp;</span><br><span class="line">  ls /proc/$&#123;pid&#125;/root/tmp/.java_pid$&#123;pid&#125;</span><br></pre></td></tr></table></figure>
 <p>之后再jmap，就ok了</p>
-<p>另外需要注意的是，argocd terminal有行数限制<br>进一步限制行数（20行），排查前几的大对象</p>
+<p>另外需要注意的是，argocd terminal有行数限制<br>避免后面的输出刷掉前面的，可以进一步限制行数（20行），排查前几的大对象</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -histo:live 1 | head -n 20</span><br></pre></td></tr></table></figure>
       
     </div>
